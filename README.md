@@ -1,167 +1,69 @@
-# 📊 Netflix Content Analysis (EDA Project)
+# Netflix Content Analysis (EDA Project)
 
-## 📌 Problem Statement
+## Project Overview
 
-With so much content available on Netflix, it becomes difficult to understand what actually works well.
-In this project, I tried to explore questions like:
+With the massive amount of content on Netflix, I wanted to dig into the data to see what actually drives the platform. This project isn't just about plotting charts; it’s about finding the underlying patterns in how Netflix builds its library.
 
-* How has Netflix content grown over the years?
-* Which genres are most common on the platform?
-* Does more popular content always mean better quality?
-* Which countries contribute the most to Netflix content?
-
-The goal was not just to analyze data, but to **understand patterns that could help in content decisions**.
+I focused on a few core questions:
+* What does the growth curve look like over the last decade?
+* Which genres dominate the catalog?
+* Is there actually a link between how popular a show is and its rating?
+* Who are the biggest geographical contributors?
 
 ---
 
-## 📂 Dataset Details
+## Dataset & Data Challenges
 
-The dataset contains around **16,000 Netflix titles**, including both movies and TV shows.
+I worked with a dataset of about 16,000 titles. While the data was rich, it had some specific issues that required manual fixing:
 
-### Main columns used:
-
-* `vote_average` → used as rating (quality indicator)
-* `popularity` → shows how much attention a title gets
-* `release_year` → helps in trend analysis
-* `genres` → type of content (like Drama, Comedy, etc.)
-* `country` → where the content is produced
-* `director`, `cast` → for deeper analysis
-
-### Things I noticed while working:
-
-* The `duration` column was completely empty, so I ignored it
-* Some columns (like genres) had multiple values in one cell, so I had to split them properly
+* **Missing Data:** The `duration` column was entirely empty, so I had to drop it from the analysis.
+* **Cleaning multi-values:** The `genres` column was a mess—multiple categories were crammed into single cells. I had to write logic to split these so I could count individual genre frequencies accurately.
+* **Key Columns:** I focused heavily on `vote_average` for quality, `popularity` for reach, and `release_year` for trends.
 
 ---
 
-## ⚙️ Approach
+## My Workflow
 
-I followed a step-by-step approach while working on this dataset:
+### 1. Initial Data Probe
+I started by checking the basic info (`df.info()`) to see where the null values were hiding and to understand the distribution of the data types.
 
-### 🔹 1. Understanding the Data
+### 2. The Cleanup Phase
+Raw data is rarely ready for plotting. I spent time:
+* Scrubbing duplicates.
+* Standardizing date formats.
+* Exploding the genre and country columns so that a movie listed in both "Drama" and "Thriller" gets counted in both categories.
 
-First, I explored the dataset structure to understand:
+### 3. Feature Engineering
+I added a few custom columns to make the charts more readable:
+* **Decades:** Grouping years into blocks (e.g., 2010s) to see long-term shifts.
+* **Rating Tiers:** Categorizing `vote_average` into Low, Mid, and High brackets.
+* **Popularity Segments:** Breaking down the popularity scores into easier-to-digest groups.
 
-* What kind of data is available
-* Which columns are useful
-* Where problems like missing values exist
-
----
-
-### 🔹 2. Data Cleaning
-
-Then I cleaned the data:
-
-* Removed duplicates
-* Handled missing values
-* Fixed date formats
-* Broke down multi-value columns (like genres)
-
-This step was important because raw data is usually messy.
+### 4. Deep Dive Analysis
+I looked at the data from three angles:
+* **Distributions:** Checking how ratings are spread out (mostly around the 6-7 mark).
+* **Comparisons:** Looking at Genre vs. Rating and Country vs. Popularity.
+* **Correlations:** I ran a correlation matrix and found something surprising: Popularity and Ratings have almost zero connection. High-quality content isn't always what's trending.
 
 ---
 
-### 🔹 3. Feature Engineering
+## What I Learned (Key Insights)
 
-To make analysis better, I created some new features:
-
-* Grouped years into decades (like 2000s, 2010s)
-* Categorized content into low/medium/high ratings
-* Split popularity into segments
-
-This helped in simplifying complex patterns.
+* **The 2015 Pivot:** There is a massive jump in content production starting in 2015. This clearly marks when Netflix shifted its strategy toward aggressive original content growth.
+* **Genre Trends:** Drama is the undisputed king of the platform, with Comedy and Thriller following behind.
+* **The "Hidden Gem" Effect:** I found a lot of titles with very high ratings but near-zero popularity scores. This suggests that Netflix has a "long tail" of quality content that doesn't always get promoted.
+* **US Dominance vs. Global Quality:** While the US produces the most volume, many international titles actually hold higher average ratings.
 
 ---
 
-### 🔹 4. Exploratory Data Analysis
+## Final Thoughts
 
-#### ✔ Univariate Analysis
+This project showed me that Netflix's strategy seems to favor variety and volume. The fact that popularity doesn't correlate with quality suggests that their recommendation algorithm is likely driving "popular" trends regardless of the actual user rating.
 
-I looked at individual columns:
-
-* Rating distribution
-* Most common genres
-
-#### ✔ Bivariate Analysis
-
-Then I compared variables:
-
-* Genre vs rating
-* Country vs popularity
-
-#### ✔ Correlation Check
-
-I checked how numerical values relate to each other.
-One interesting thing I noticed was that **popularity and rating are not strongly connected**.
+## Next Steps
+In the future, I want to use this cleaned data to build a basic recommendation engine and perhaps pull in a separate dataset for user reviews to see if the "hidden gems" I found have a specific cult following.
 
 ---
 
-### 🔹 5. Trend Analysis
-
-I also analyzed how things changed over time:
-
-* Content increased rapidly after 2015
-* Some genres became more common in recent years
-
-This part helped in understanding Netflix’s growth.
-
----
-
-## 📈 Results & Insights
-
-Here are some key things I found:
-
-* 📌 **Content Growth:**
-  There is a clear spike in content after 2015. This shows Netflix expanded aggressively during this period.
-
-* 🎭 **Genre Distribution:**
-  Drama is the most common genre, followed by Comedy and Thriller.
-
-* ⭐ **Popularity vs Rating:**
-  I expected popular content to have high ratings, but that was not always true. The relationship is actually very weak.
-
-* 🌍 **Country Contribution:**
-  The United States produces most of the content, but other countries also contribute some high-quality titles.
-
-* 💡 **Interesting Observation:**
-  Some highly rated content has very low popularity, which means good content is sometimes hidden.
-
----
-
-## 🧠 Conclusion
-
-From this analysis, I understood that:
-
-* Netflix focuses more on **content quantity and variety**
-* Popular content is not always the best-rated
-* Growth after 2015 played a major role in shaping the platform
-* There is a mix of global content contributing to quality
-
-Overall, this project helped me understand how real-world data behaves and how insights are not always obvious.
-
----
-
-## 🚀 Future Improvements
-
-If I continue this project, I would like to:
-
-* Build a recommendation system
-* Use machine learning to predict content success
-* Create dashboards for better visualization
-* Analyze user reviews if available
-
----
-
-## 🛠️ Tools Used
-
-* Python
-* Pandas, NumPy
-* Matplotlib, Seaborn
-* Jupyter Notebook
-
----
-
-## 👨‍💻 Author
-
-**Hasya Patel**
-
+**Author:** Hasya Patel  
+**Tech Stack:** Python, Pandas, Matplotlib, Seaborn
